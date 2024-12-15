@@ -16,6 +16,13 @@ const Dashboard = () => {
   });
   const navigate = useNavigate();
 
+  const statusOptions = [
+    "Operational",
+    "Degraded Performance",
+    "Partial Outage",
+    "Major Outage",
+  ];
+
   // Fetch services from the API
   const loadServices = async () => {
     try {
@@ -41,8 +48,10 @@ const Dashboard = () => {
 
   // Delete a service
   const handleDeleteService = async (serviceId) => {
+    console.log("Deleting service with ID:", serviceId);
     try {
       await deleteService(serviceId);
+      console.log("Service deleted successfully");
       loadServices(); // Reload services after deletion
     } catch (error) {
       console.error("Error deleting service:", error);
@@ -51,9 +60,9 @@ const Dashboard = () => {
   };
 
   // Update a service's status
-  const handleUpdateService = async (serviceId, updatedData) => {
+  const handleUpdateService = async (serviceId, newStatus) => {
     try {
-      await updateService(serviceId, updatedData);
+      await updateService(serviceId, { status: newStatus });
       loadServices(); // Reload services after updating
     } catch (error) {
       console.error("Error updating service:", error);
@@ -122,16 +131,23 @@ const Dashboard = () => {
               >
                 Status
               </label>
-              <input
+              <select
                 id="status"
-                type="text"
-                placeholder="Status"
                 value={newService.status}
                 onChange={(e) =>
                   setNewService({ ...newService, status: e.target.value })
                 }
                 className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              >
+                <option value="" disabled>
+                  Select Status
+                </option>
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex flex-col">
@@ -177,16 +193,19 @@ const Dashboard = () => {
                 <p className="text-gray-600">Status: {service.status}</p>
                 <p className="text-gray-600">{service.description}</p>
                 <div className="mt-4 space-x-4">
-                  <button
-                    onClick={() =>
-                      handleUpdateService(service._id, {
-                        status: "Operational",
-                      })
+                  <select
+                    value={service.status}
+                    onChange={(e) =>
+                      handleUpdateService(service._id, e.target.value)
                     }
-                    className="py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+                    className="py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    Set to Operational
-                  </button>
+                    {statusOptions.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
                   <button
                     onClick={() => handleDeleteService(service._id)}
                     className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"

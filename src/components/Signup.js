@@ -8,7 +8,6 @@ const Signup = () => {
     lastName: "",
     emailId: "",
     password: "",
-    role: "",
   });
   const navigate = useNavigate();
 
@@ -64,14 +63,6 @@ const Signup = () => {
             name="password"
             placeholder="Password"
             value={formData.password}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            name="role"
-            placeholder="Role"
-            value={formData.role}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

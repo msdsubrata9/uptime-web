@@ -6,6 +6,7 @@ export const signup = async (userData) => {
     const response = await axios.post(`${BASE_URL}/signup`, userData, {
       withCredentials: true,
     });
+    localStorage.setItem("token", response.data.token);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Error signing up");
@@ -17,6 +18,7 @@ export const signin = async (credentials) => {
     const response = await axios.post(`${BASE_URL}/login`, credentials, {
       withCredentials: true,
     });
+    localStorage.setItem("token", response.data.token);
     console.log("Login Response:", response);
     return response.data;
   } catch (error) {
@@ -37,7 +39,9 @@ export const logout = async () => {
 // Services API Functions
 export const fetchServices = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/services`);
+    const response = await axios.get(`${BASE_URL}/services`, {
+      withCredentials: true,
+    });
     return response.data.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Error fetching services");
@@ -49,6 +53,7 @@ export const createService = async (serviceData) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(`${BASE_URL}/services`, serviceData, {
       headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -64,6 +69,7 @@ export const updateService = async (serviceId, updatedData) => {
       updatedData,
       {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       }
     );
     return response.data;
@@ -75,11 +81,14 @@ export const updateService = async (serviceId, updatedData) => {
 export const deleteService = async (serviceId) => {
   try {
     const token = localStorage.getItem("token");
+    console.log(token);
     const response = await axios.delete(`${BASE_URL}/services/${serviceId}`, {
       headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
+    console.error("Error response:", error.response || error);
     throw new Error(error.response?.data?.message || "Error deleting service");
   }
 };
