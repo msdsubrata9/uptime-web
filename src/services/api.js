@@ -7,6 +7,7 @@ export const signup = async (userData) => {
     const response = await axios.post(`${BASE_URL}/signup`, userData, {
       withCredentials: true,
     });
+    console.log(response);
     localStorage.setItem("token", response.data.token);
     return response.data;
   } catch (error) {
