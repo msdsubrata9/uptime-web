@@ -3,6 +3,7 @@ import { BASE_URL } from "../utils/constants";
 // Auth API Functions
 export const signup = async (userData) => {
   try {
+    console.log(BASE_URL);
     const response = await axios.post(`${BASE_URL}/signup`, userData, {
       withCredentials: true,
     });
