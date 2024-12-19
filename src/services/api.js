@@ -2,6 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 // Auth API Functions
 export const signup = async (userData) => {
+  console.log(userData);
   try {
     const response = await axios.post(`${BASE_URL}/signup`, userData, {
       withCredentials: true,
